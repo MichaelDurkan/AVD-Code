@@ -2,19 +2,19 @@ write-host "Configuring FSLogix"
 
 # Define variables for Storage and File Share Locations
 
-$NEfileServer="neavdstor1.file.core.windows.net"
-$NEprofileShare=\\$($NEfileServer)\neavdshare
+$DUBfileServer="dubavdstor1.file.core.windows.net"
+$DUBprofileShare=\\$($DUBfileServer)\neavdshare
 
 $WEfileServer="weavdstor1.file.core.windows.net"
 $WEprofileShare=\\$($WEfileServer)\weavdshare
 
 # Define variables for Storage Account Keys
 
-$NEuser="localhost\neavdstor1"
-$NEsecret="MlRNQE8KqvV8IlrNuNLg2vFzaxuELJO5GX47feZQCHrnUqZqo1CJZT1wgpIP2zLR6ZUeO0AXRIrO+AStjTdo3Q=="
+$DUBuser="localhost\dubavdstor1"
+$DUBsecret="******************"
 
 $WEuser="localhost\weavdstor1"
-$WEsecret="c1F4il7rC+OzpXqNXc192QZfxgVHRuky9kbEKb8+MJupQKSr3fLQZ0p8GxeIloKvOEkfGzJ8av7S+AStpt79bw=="
+$WEsecret="******************"
 
 
 New-Item -Path "HKLM:\SOFTWARE" -Name "FSLogix" -ErrorAction Ignore
@@ -46,13 +46,12 @@ New-ItemProperty -Path "HKLM:\SOFTWARE\FSLogix\Profiles" -Name "AccessNetworkAsC
  
 # Store credentials on each host to access the storage account
 
-cmdkey.exe /add:$NEfileServer /user:$($NEuser) /pass:$($NEsecret)
+cmdkey.exe /add:$DUBfileServer /user:$($DUBuser) /pass:$($DUBsecret)
 
 cmdkey.exe /add:$WEfileServer /user:$($WEuser) /pass:$($WEsecret)
 
 # Disable Windows Defender Credential Guard (only needed for Windows 11 22H2)
 
 New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa" -Name "LsaCfgFlags" -Value 0 -force
-
 
 write-host "The script has finished."

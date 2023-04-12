@@ -3,18 +3,18 @@ write-host "Configuring FSLogix"
 # Define variables for Storage and File Share Locations
 
 $DUBfileServer="dubavdstor1.file.core.windows.net"
-$DUBprofileShare=\\$($DUBfileServer)\neavdshare
+$DUBprofileShare=\\$($DUBfileServer)\dubavdshare
 
-$WEfileServer="weavdstor1.file.core.windows.net"
-$WEprofileShare=\\$($WEfileServer)\weavdshare
+$AMSfileServer="amsavdstor1.file.core.windows.net"
+$AMSprofileShare=\\$($AMSfileServer)\amsavdshare
 
 # Define variables for Storage Account Keys
 
 $DUBuser="localhost\dubavdstor1"
 $DUBsecret="******************"
 
-$WEuser="localhost\weavdstor1"
-$WEsecret="******************"
+$AMSuser="localhost\amsavdstor1"
+$AMSsecret="******************"
 
 
 New-Item -Path "HKLM:\SOFTWARE" -Name "FSLogix" -ErrorAction Ignore
@@ -23,7 +23,7 @@ New-Item -Path "HKLM:\SOFTWARE\FSLogix" -Name "Profiles" -ErrorAction Ignore
 
 New-ItemProperty -Path "HKLM:\SOFTWARE\FSLogix\Profiles" -Name "Enabled" -Value 1 -force
 
-New-ItemProperty -Path "HKLM:\SOFTWARE\FSLogix\Profiles" -Name "CCDLocations" -Value "type=smb,connectionString=$NEprofileShare;type=smb,connectionString=$WEprofileShare" -force
+New-ItemProperty -Path "HKLM:\SOFTWARE\FSLogix\Profiles" -Name "CCDLocations" -Value "type=smb,connectionString=$DUBprofileShare;type=smb,connectionString=$AMSprofileShare" -force
 
 New-ItemProperty -Path "HKLM:\SOFTWARE\FSLogix\Profiles" -Name "ConcurrentUserSessions" -Value 1 -force
 
@@ -48,7 +48,7 @@ New-ItemProperty -Path "HKLM:\SOFTWARE\FSLogix\Profiles" -Name "AccessNetworkAsC
 
 cmdkey.exe /add:$DUBfileServer /user:$($DUBuser) /pass:$($DUBsecret)
 
-cmdkey.exe /add:$WEfileServer /user:$($WEuser) /pass:$($WEsecret)
+cmdkey.exe /add:$AMSfileServer /user:$($AMSuser) /pass:$($AMSsecret)
 
 # Disable Windows Defender Credential Guard (only needed for Windows 11 22H2)
 
